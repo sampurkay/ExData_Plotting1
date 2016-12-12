@@ -1,0 +1,17 @@
+datafull <- fread("./data/household_power_consumption.txt",
+                  sep=";",header=TRUE, na.strings = c("NA", "N/A", "null", "?"))
+datafull$Date <- as.Date(datafull$Date, "%d/%m/%Y")
+date1 <- as.Date("01/02/2007", "%d/%m/%Y")
+date2 <- as.Date("02/02/2007", "%d/%m/%Y")
+data <- with(datafull, datafull[(Date >= date1 & Date <= date2), ])
+head(data)
+nrow(data)
+names(data)
+outcome <- subset(data$Global_active_power, !is.na(data$Global_active_power) == TRUE)
+par(pty="s")
+png("plot1.png", width=480, height=480)
+hist(outcome, main= "Global Active Power", xlab= "Global Active Power (kilowatts)", 
+     ylab="Frequency", cex.main=0.75, cex.lab= 0.7,cex.axis=0.5, yaxt="n", col="red")
+ticks <- seq(0,1200,by=200)
+axis(2, at=ticks,labels=ticks, cex.axis=0.5)
+dev.off()
